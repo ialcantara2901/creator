@@ -5,6 +5,6 @@
         
         COPY . /app
         
-        RUN pip install requests
+        RUN pip install pika
         
         CMD ["python", "main.py"]
