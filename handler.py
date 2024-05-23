@@ -15,7 +15,7 @@ class FileCreationHandler:
 
     def process_input(self, input_data):
         # Carregar o JSON
-        data = json.loads(input_data)
+        data = input_data
 
         # Criar arquivos
         self.create_file('service.py', data['service'])
