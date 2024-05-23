@@ -12,7 +12,7 @@ class RabbitMQService:
 
     def connect(self):
         # Conectar-se ao RabbitMQ
-        credentials = pika.PlainCredentials(os.getenv("RABBITMQ_USER"), os.getenv("RABBITMQ_PASSWORD"))
+        credentials = pika.PlainCredentials("admin", "Fa230130")
         parameters = pika.ConnectionParameters('rabbitmq', 5672, 'default', credentials)
         connection = pika.BlockingConnection(parameters)
 
