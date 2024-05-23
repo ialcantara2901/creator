@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   url-status-checker:
-    image: igoralcantara/app:creator-v0.01
+    image: igoralcantara/app:creator-v0.02
     build: .
     deploy:
       replicas: 1
