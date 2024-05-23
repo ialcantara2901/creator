@@ -4,12 +4,12 @@ import pika
 import json
 
 class RabbitMQService:
-    def __init__(host='rabbitmq'):
-
-        credentials = pika.PlainCredentials("admin", "Fa230130")
-        parameters = pika.ConnectionParameters('rabbitmq', 5672, 'default', credentials)
-        connection = pika.BlockingConnection(parameters)
-        #connection = pika.BlockingConnection(pika.ConnectionParameters(self.host))
+    def __init__(self):
+        self.credentials = pika.PlainCredentials("admin", "Fa230130")
+        self.parameters = pika.ConnectionParameters('rabbitmq', 5672, 'default', self.credentials)
+    
+    def connect(self):
+        connection = pika.BlockingConnection(self.parameters)
         return connection
 
     def declare_queue(self, channel, queue_name):
