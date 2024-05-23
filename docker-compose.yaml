@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  url-status-checker:
+    image: igoralcantara/app:creator-v0.01
+    build: .
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      - url-net
+networks:
+  url-net:
