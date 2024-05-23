@@ -1,22 +1,15 @@
 # service.py
 
 import pika
-import json, os
-from dotenv import load_dotenv
-
-load_dotenv()
+import json
 
 class RabbitMQService:
-    def __init__(self, host='rabbitmq'):
-        self.host = host
+    def __init__(host='rabbitmq'):
 
-    def connect(self):
-        # Conectar-se ao RabbitMQ
         credentials = pika.PlainCredentials("admin", "Fa230130")
         parameters = pika.ConnectionParameters('rabbitmq', 5672, 'default', credentials)
         connection = pika.BlockingConnection(parameters)
-
-        connection = pika.BlockingConnection(pika.ConnectionParameters(self.host))
+        #connection = pika.BlockingConnection(pika.ConnectionParameters(self.host))
         return connection
 
     def declare_queue(self, channel, queue_name):
