@@ -72,11 +72,11 @@ class FileCreationHandler:
                 uses: actions/checkout@v4
             - name: build
                 run: |
-                docker build . -t igoralcantara/app:creator-v0.01
+                docker build . -t igoralcantara/app:creator1-v0.01
             - name: publish
                 run: |
                 docker login -u igoralcantara -p ${{ secrets.DOCKER_HUB_TOKEN }}
-                docker push igoralcantara/creator-v0.01
+                docker push igoralcantara/app:creator1-v0.01
         '''
         self.create_file('.github/workflows/publish-image.yaml', publish_image_content)
 
