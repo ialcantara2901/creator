@@ -4,6 +4,8 @@ import pika
 import json
 from dotenv import load_dotenv
 
+load_dotenv()
+
 class RabbitMQService:
     def __init__(self, host='rabbitmq'):
         self.host = host
