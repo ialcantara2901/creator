@@ -1,18 +1,21 @@
 # handler.py
 
 from service import RabbitMQService
+import os, json
 
 class FileCreationHandler:
     def __init__(self):
         self.rabbitmq_service = RabbitMQService()
 
     def create_file(self, filename, content):
+        # Certifique-se de que o diretório existe
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(filename, 'w', encoding='utf-8') as file:
             file.write(content)
 
     def process_input(self, input_data):
         # Carregar o JSON
-        data = input_data
+        data = json.loads(input_data)
 
         # Criar arquivos
         self.create_file('service.py', data['service'])
@@ -52,6 +55,30 @@ class FileCreationHandler:
           url-net:
         '''
         self.create_file('docker-compose.yml', docker_compose_content)
+
+        # Criar arquivo publish-image.yaml
+        publish_image_content = '''
+        name: Publish image docker hub
+        on:
+        push:
+            branches:
+            - 'main'
+
+        jobs:
+        publish_image:
+            runs-on: ubuntu-latest
+            steps:
+            - name: checkout
+                uses: actions/checkout@v4
+            - name: build
+                run: |
+                docker build . -t igoralcantara/app:creator-v0.01
+            - name: publish
+                run: |
+                docker login -u igoralcantara -p ${{ secrets.DOCKER_HUB_TOKEN }}
+                docker push igoralcantara/creator-v0.01
+        '''
+        self.create_file('.github/workflows/publish-image.yaml', publish_image_content)
 
         print("Arquivos criados com sucesso.")
         

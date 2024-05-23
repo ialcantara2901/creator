@@ -4,7 +4,7 @@ import pika
 import json
 
 class RabbitMQService:
-    def __init__(self, host='localhost'):
+    def __init__(self, host='rabbitmq'):
         self.host = host
 
     def connect(self):

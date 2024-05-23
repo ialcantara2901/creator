@@ -7,4 +7,4 @@
         
         RUN pip install requests
         
-        CMD ["python", "application.py"]
+        CMD ["python", "main.py"]
