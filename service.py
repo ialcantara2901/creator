@@ -2,12 +2,18 @@
 
 import pika
 import json
+from dotenv import load_dotenv
 
 class RabbitMQService:
     def __init__(self, host='rabbitmq'):
         self.host = host
 
     def connect(self):
+        # Conectar-se ao RabbitMQ
+        credentials = pika.PlainCredentials(os.getenv("RABBITMQ_USER"), os.getenv("RABBITMQ_PASSWORD"))
+        parameters = pika.ConnectionParameters('rabbitmq', 5672, 'default', credentials)
+        connection = pika.BlockingConnection(parameters)
+
         connection = pika.BlockingConnection(pika.ConnectionParameters(self.host))
         return connection
 

@@ -32,7 +32,10 @@ class FileCreationHandler:
         
         COPY . /app
         
+        # Instale as dependências Python
+        RUN pip install --upgrade pip
         RUN pip install pika
+        RUN pip install python-dotenv
         
         CMD ["python", "application.py"]
         '''
