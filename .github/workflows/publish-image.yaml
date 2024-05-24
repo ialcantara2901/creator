@@ -12,8 +12,8 @@ jobs:
         uses: actions/checkout@v4
       - name: build
         run: |
-          docker build . -t igoralcantara/app:creator-v0.02
+          docker build . -t igoralcantara/app:creator-v0.03
       - name: publish
         run: |
           docker login -u igoralcantara -p ${{ secrets.DOCKER_HUB_TOKEN }}
-          docker push igoralcantara/app:creator-v0.02
+          docker push igoralcantara/app:creator-v0.03

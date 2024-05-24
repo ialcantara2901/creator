@@ -7,6 +7,15 @@ import subprocess
 class FileCreationHandler:
     def __init__(self):
         self.rabbitmq_service = RabbitMQService()
+    
+    def process_input(self, input_data):
+        # Verificar se todos os parâmetros necessários estão presentes
+        required_params = ['service', 'handler', 'application', 'requirements', 'env']
+        for param in required_params:
+            if not input_data.get(param):
+                print(f"Parâmetro '{param}' ausente no input_data. Retornando para a fila creator_out.")
+                self.rabbitmq_service.send_message('creator_out', {"status": "fail", "message": "Insufficient data"})
+                return
 
     def create_file(self, filename, content):
         # Certifique-se de que o diretório ./tmp existe
@@ -27,7 +36,7 @@ class FileCreationHandler:
         self.create_file('application.py', data['application'])
         self.create_file('.env', data['env'])
         # Criar requirements.txt na pasta ./tmp
-        self.create_file('requirements.txt', data['requirements'])
+        self.create_file('requeriments.txt', data['requeriments'])
 
         # Criar Dockerfile
         dockerfile_content = '''
@@ -37,6 +46,10 @@ FROM python:3.9-alpine
 WORKDIR /app
 
 COPY . /app
+
+# Instale Git
+RUN apk add --no-cache git
+RUN apk add github-cli
 
 # Instale as dependências Python
 RUN pip install --upgrade pip
@@ -94,19 +107,27 @@ publish_image:
         # Retornar uma mensagem de sucesso
         return {"status": "success", "message": "Files created successfully"}
 
+
+        
+        
     def run_git_commands(self):
+        repo_name = 'app'
         #github_username = os.getenv('GITHUB_USERNAME')
-        github_username = "ialcantara2901"
+        #github_username = "ialcantara2901"
         #github_token = os.getenv('GITHUB_TOKEN')
-        g_token = "${{ secrets.G_TOKEN }}"
-        repository_url = f'https://{github_username}:{g_token}@github.com/{github_username}/creator.git'
+        g_token = os.getenv('GITHUB_TOKEN')
+        #repository_url = f'https://{github_username}:{g_token}@github.com/{github_username}/{repo_name}.git'
         
         commands = [
-            "git init",
-            f"git remote add origin {repository_url}",
+            f"echo {g_token} ../mytoken.txt",
+            "gh auth login --with-token < mytoken.txt",
+            "gh repo create app2 --public",
+            #"git init -b main",
+            #f"git remote add origin {repository_url}",
             "git add .",
+            #'git config --global user.email "igor.alcantara@gmail.com"',
             'git commit -m "Start IA app"',
-            "git branch -M main",
+            #"git branch -M main",
             "git push -u origin main"
         ]
         cwd = './tmp'
