@@ -8,11 +8,12 @@ class FileCreationHandler:
         self.rabbitmq_service = RabbitMQService()
 
     def create_file(self, filename, content):
-        # Certifique-se de que o diretório existe
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        # Certifique-se de que o diretório existe, se aplicável
+        directory = os.path.dirname(filename)
+        if directory and not os.path.exists(directory):
+            os.makedirs(directory, exist_ok=True)
         with open(filename, 'w', encoding='utf-8') as file:
             file.write(content)
-
     def process_input(self, input_data):
         # Carregar o JSON
         data = input_data
