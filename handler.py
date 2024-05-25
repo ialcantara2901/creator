@@ -47,10 +47,6 @@ WORKDIR /app
 
 COPY . /app
 
-# Instale Git
-RUN apk add --no-cache git
-RUN apk add github-cli
-
 # Instale as dependências Python
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
@@ -108,37 +104,47 @@ publish_image:
         return {"status": "success", "message": "Files created successfully"}
 
 
-        
-        
     def run_git_commands(self):
-        repo_name = 'app'
-        #github_username = os.getenv('GITHUB_USERNAME')
-        #github_username = "ialcantara2901"
-        #github_token = os.getenv('GITHUB_TOKEN')
-        g_token = os.getenv('GITHUB_TOKEN')
-        #repository_url = f'https://{github_username}:{g_token}@github.com/{github_username}/{repo_name}.git'
+
         
         commands = [
-            f"echo {g_token} ../mytoken.txt",
-            "gh auth login --with-token < mytoken.txt",
-            "gh repo create app2 --public",
-            #"git init -b main",
-            #f"git remote add origin {repository_url}",
-            "git add .",
-            #'git config --global user.email "igor.alcantara@gmail.com"',
-            'git commit -m "Start IA app"',
-            #"git branch -M main",
-            "git push -u origin main"
+            f"docker build . -t igoralcantara/app:app-v0.01",
         ]
         cwd = './tmp'
         for command in commands:
             subprocess.run(command, cwd=cwd, shell=True, check=True)
         print("Comandos Git executados com sucesso.")
+
         
-        cwd = './tmp'
-        for command in commands:
-            subprocess.run(command, cwd=cwd, shell=True, check=True)
-        print("Comandos Git executados com sucesso.")
+    # def run_git_commands(self):
+    #     repo_name = 'app2'
+    #     #github_username = os.getenv('GITHUB_USERNAME')
+    #     #github_username = "ialcantara2901"
+    #     #github_token = os.getenv('GITHUB_TOKEN')
+    #     g_token = os.getenv('GITHUB_TOKEN')
+    #     #repository_url = f'https://{github_username}:{g_token}@github.com/{github_username}/{repo_name}.git'
+        
+    #     commands = [
+    #         f"echo {g_token} > ../mytoken.txt",
+    #         "gh auth login --with-token < ../mytoken.txt",
+    #         f"gh repo create {repo_name} --public",
+    #         #"git init -b main",
+    #         #f"git remote add origin {repository_url}",
+    #         "git add .",
+    #         'git config --global user.email "igor.alcantara@gmail.com"',
+    #         'git commit -m "Start IA app"',
+    #         #"git branch -M main",
+    #         "git push -u origin main"
+    #     ]
+    #     cwd = './tmp'
+    #     for command in commands:
+    #         subprocess.run(command, cwd=cwd, shell=True, check=True)
+    #     print("Comandos Git executados com sucesso.")
+        
+    #     cwd = './tmp'
+    #     for command in commands:
+    #         subprocess.run(command, cwd=cwd, shell=True, check=True)
+    #     print("Comandos Git executados com sucesso.")
 
     def handle_message(self, message):
         result = self.process_input(message)
